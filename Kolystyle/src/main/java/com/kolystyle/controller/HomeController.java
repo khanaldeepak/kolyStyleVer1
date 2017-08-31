@@ -82,6 +82,16 @@ public class HomeController {
 	public String index() {
 		return "index";
 	}
+	
+	 @RequestMapping("/home")
+	    public String home(Model model){
+	        List<Product> productList = productService.findAll();
+	        model.addAttribute("productList",productList);
+	      //  model.addAttribute("searchCondition", searchCondition);
+	        return "home";
+	    }
+	
+	
 
 	@RequestMapping("/login")
 	public String login(Model model) {

@@ -3,10 +3,13 @@ package com.kolystyle.service.impl;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kolystyle.domain.CartItem;
+import com.kolystyle.domain.GuestShoppingCart;
 import com.kolystyle.domain.Order;
 import com.kolystyle.domain.Product;
 import com.kolystyle.domain.ProductToCartItem;
@@ -89,8 +92,10 @@ public class CartItemServiceImpl implements CartItemService {
 	
 	
 	//Guest Cart Added
-	public CartItem addProductToGuestCartItem(Product product,ShoppingCart shoppingCart,int qty){
-		List<CartItem> cartItemList = findByShoppingCart(shoppingCart);
+	public CartItem addProductToGuestCartItem(Product product,GuestShoppingCart guestShoppingCart,int qty){
+		
+		
+		List<CartItem> cartItemList = findByGuestShoppingCart(guestShoppingCart);
 		
 		for(CartItem cartItem : cartItemList){
 			if(product.getId() == cartItem.getProduct().getId()){
@@ -104,7 +109,7 @@ public class CartItemServiceImpl implements CartItemService {
 		}
 		
 		CartItem cartItem = new CartItem();
-		cartItem.setShoppingCart(shoppingCart);
+		cartItem.setGuestShoppingCart(guestShoppingCart);
 		cartItem.setProduct(product);
 		
 		cartItem.setQty(qty);
@@ -117,5 +122,9 @@ public class CartItemServiceImpl implements CartItemService {
 		productToCartItemRepository.save(productToCartItem);
 		
 		return cartItem;
+	}
+
+	public List<CartItem> findByGuestShoppingCart(GuestShoppingCart guestShoppingCart) {
+		return cartItemRepository.findByGuestShoppingCart(guestShoppingCart);
 	}
 }

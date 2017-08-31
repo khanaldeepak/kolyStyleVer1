@@ -30,9 +30,20 @@
 						<a class="btn btn-warning" th:href="@{/productshelf}">Continue
 							Shopping</a>
 					</div>
-					<div class="col-xs-6 text-right">
+					<div class="col-xs-6 text-right" th:if="${userShoppingCart}">
 						<a class="btn btn-primary"
 							th:href="@{/checkout(id=${shoppingCart.id})}">Check Out</a>
+					</div>
+					<div class="col-xs-6 text-right" th:if="${guestShoppingCart}">
+					
+					<div class="col-xs-6">
+					<p><strong>BAG ID: <span th:text="${guestBagId}"></span></strong></p>
+					</div>
+					<div class="col-xs-6">
+						<a class="btn btn-primary"
+							th:href="@{/checkout(id=${guestBagId})}">Check Out</a>
+					</div>
+							
 					</div>
 					<br/><br/>
 					
@@ -110,12 +121,49 @@
 					</div>
 					<div class="row">
 						<hr />
+						<div class="col-xs-6 text-left">
+						
+						<form name="applyPromo" action="/shoppingCart/applyPromo" method="post">
+						<div class="form-group">
+						<label class="col-md-4 control-label" style="margin-top:5px;" for="promoCode">
+							HAVE A PROMO CODE? </label>
+						<div class="col-md-5">
+							<input th:if="${userShoppingCart}" hidden="hidden" name="id" th:value="${shoppingCart.id}" />
+							<input th:if="${guestShoppingCart}" hidden="hidden" name="id" th:value="${guestBagId}" />
+							 <input
+									th:id="enterPromoCode" th:name="promocode"					
+									class="form-control promoCode" value="" th:type="text"/>
+									
+									<!-- Coupon you applied is not valid th:if="${invalidPromoError}"-->
+									<p id="applyPromoError" class="text-danger">Error dont mess up</p>
+						</div>
+						<div class="col-md-3">			
+								<button style="display: none;"
+									th:id="applyPromoNow" type="submit"
+									class="btn btn-primary btn-md">Apply</button>
+						</div>
+					</div>
+					
+					
+							
+						</form>
+						
+						</div>
+						</div>
+						<div class="row">
+						
 						<h4 class="col-xs-12 text-right">
 							<strong style="font-size: large;">Total Price (<span
 								th:text="${#lists.size(cartItemList)}"></span> items):
-							</strong> <span style="color: #db3208; font-size: large;">$<span
-								th:text="${shoppingCart.grandTotal}"></span></span>
+							</strong> <span style="color: #db3208; font-size: large;">$<span th:if="${userShoppingCart}"
+								th:text="${shoppingCart.grandTotal}"></span>
+								
+								<span th:if="${guestShoppingCart}"
+								th:text="${guestShoppingCartGrandTotal}"></span>
+								
+								</span>
 						</h4>
+						
 					</div>
 
 				</div>

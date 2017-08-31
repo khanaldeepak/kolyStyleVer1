@@ -44,3 +44,52 @@ $(document).ready(function(){
 	$("#txtConfirmPassword").keyup(checkPasswordMatch);
 	$("#txtNewPassword").keyup(checkPasswordMatch);
 });
+
+//Validate Promo
+$(document).ready(function(){
+	$('#enterPromoCode').keyup(function(){
+		var id=this.id;
+		if(this.value!=''){
+			$('#applyPromoNow').css('display','inline-block');
+			}else{
+			$('#applyPromoNow').css('display','none');
+			}
+		$('#applyPromoError').css('display','none');
+	});
+	$('#enterPromoCode').on('focusout',function(){
+		
+		if(this.value!=''){
+			$('#applyPromoNow').css('display','inline-block');
+			}else{
+			$('#applyPromoNow').css('display','none');
+			}
+	});
+	
+	
+});
+
+$(function(){
+	$('#applyPromoNow').click(function(){
+		var promocode = $('#enterPromoCode').val();
+		if(promocode ==""){
+			$('#applyPromoError').html("Please enter a valid promo code");
+			$('#applyPromoError').css('display','inline-block');
+		}else{
+			$.ajax({
+				type:"POST",
+				url:"/shoppingCart/applyPromoCode",
+				data:promocode,
+				success:function(){
+					$('#applyPromoError').html("Promo Code Applied");
+					$('#applyPromoError').css('display','inline-block');
+				},
+				error: function(e){
+					$('#applyPromoError').html("Promo Code Applied Failed");
+
+					$('#applyPromoError').css('display','inline-block');
+				}
+			});
+		}
+	});
+});
+
